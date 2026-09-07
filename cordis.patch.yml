@@ -1,0 +1,18 @@
+# dsh-remote-ssh — SSH session manager for DeepSeek Harness.
+# Registers the plugin entry into the profile loader tree. All data lives
+# under ~/.dsh/dsh-remote-ssh/ (profiles + host-key cache, no secrets) and
+# secrets are stored through the DSH credentials center (~/.dsh/.credentials.yaml).
+# Agent tools: ssh_profile_* / ssh_run / ssh_session_*.
+# Client UI: Settings > Plugins > Remote SSH (profiles card) + a self-hosted
+# xterm terminal page opened via the built-in sidebar (sidebar_open).
+- insert:
+    - id: dsh-remote-ssh
+      name: dsh-remote-ssh
+      config:
+        sshPath: ""
+        connectTimeoutMs: 15000
+        runTimeoutMs: 120000
+        runOutputLimit: 1048576
+        maxSessions: 8
+        terminalScrollback: 5000
+        trustedHosts: []

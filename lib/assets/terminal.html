@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Remote SSH terminal</title>
+<link rel="stylesheet" href="/dsh-remote-ssh/assets/xterm.css">
+<style>
+  :root { color-scheme: dark; }
+  html, body { height: 100%; margin: 0; background: #101014; color: #e6e6e9;
+    font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif; }
+  #bar { display: flex; align-items: center; gap: 10px; padding: 6px 10px;
+    background: #181820; border-bottom: 1px solid #2a2a34; font-size: 13px; user-select: none; }
+  #bar .dot { width: 8px; height: 8px; border-radius: 50%; background: #5cc06c; flex: none; }
+  #bar .dot.off { background: #c04b4b; }
+  #bar .title { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; }
+  #bar .hint { color: #8b8b96; font-size: 12px; white-space: nowrap; }
+  #bar button { background: #26262f; color: #e6e6e9; border: 1px solid #3a3a46; border-radius: 6px;
+    padding: 4px 10px; font: inherit; font-size: 12px; cursor: pointer; }
+  #bar button:hover { background: #32323e; }
+  #term { height: calc(100% - 36px); padding: 6px 0 0 8px; box-sizing: border-box; }
+  #term .xterm { height: 100%; }
+  #banner { display: none; position: absolute; top: 42px; left: 0; right: 0; padding: 10px 14px;
+    background: #2a1f1f; border-bottom: 1px solid #7c3a3a; color: #ffb3b3; font-size: 13px; }
+  body.banner #banner { display: block; }
+</style>
+</head>
+<body>
+<div id="bar">
+  <span class="dot" id="dot"></span>
+  <span class="title" id="title">Remote SSH</span>
+  <span class="hint" id="hint">connecting…</span>
+  <button id="reconnect" style="display:none">Reconnect</button>
+  <button id="closeBtn" title="Close session (kills the remote shell)">✕ close</button>
+</div>
+<div id="banner"></div>
+<div id="term"></div>
+<script src="/dsh-remote-ssh/assets/addon-fit.js"></script>
+<script src="/dsh-remote-ssh/assets/xterm.js"></script>
+<script>
+(function () {
+  "use strict";
+  var q = new URLSearchParams(location.search);
+  var id = q.get("id") || "";
+  var token = q.get("token") || "";
+  var name = q.get("name") || "Remote SSH";
+  var scrollback = parseInt(q.get("sb") || "5000", 10) || 5000;
+  var dot = document.getElementById("dot");
+  var hint = document.getElementById("hint");
+  var titleEl = document.getElementById("title");
+  var bannerEl = document.getElementById("banner");
+  var reconnectBtn = document.getElementById("reconnect");
+  var closeBtn = document.getElementById("closeBtn");
+  titleEl.textContent = name;
+  document.title = name + " · Remote SSH";
+
+  function showBanner(msg) {
+    bannerEl.textContent = msg;
+    document.body.classList.add("banner");
+  }
+  function hideBanner() {
+    bannerEl.textContent = "";
+    document.body.classList.remove("banner");
+  }
+
+  var term = new Terminal({
+    cursorBlink: true,
+    scrollback: scrollback,
+    fontSize: 13,
+    fontFamily: 'Menlo, Consolas, "Cascadia Mono", "Courier New", monospace',
+    theme: { background: "#101014", foreground: "#e6e6e9", cursor: "#e6e6e9" },
+    allowProposedApi: true,
+  });
+  var fitAddon = new FitAddon.FitAddon();
+  term.loadAddon(fitAddon);
+  term.open(document.getElementById("term"));
+
+  function b64encode(text) {
+    var bytes = new TextEncoder().encode(text);
+    var bin = "";
+    for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    return btoa(bin);
+  }
+  function b64decode(b64) {
+    var bin = atob(b64);
+    var bytes = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return new TextDecoder().decode(bytes);
+  }
+
+  var ws = null;
+  var closedByUser = false;
+  var exited = false;
+  var fitTimer = null;
+
+  function fit() {
+    try { fitAddon.fit(); } catch (e) { /* ignore */ }
+  }
+  function sendResize() {
+    if (ws && ws.readyState === 1 && !exited) {
+      ws.send(JSON.stringify({ type: "resize", cols: term.cols, rows: term.rows }));
+    }
+  }
+  window.addEventListener("resize", function () {
+    if (fitTimer) clearTimeout(fitTimer);
+    fitTimer = setTimeout(function () { fit(); sendResize(); }, 80);
+  });
+  fit();
+  sendResize();
+
+  function setStatus(mode, text) {
+    dot.classList.toggle("off", mode !== "live");
+    hint.textContent = text;
+    reconnectBtn.style.display = mode === "dead" ? "inline-block" : "none";
+  }
+
+  function connect() {
+    if (exited && !closedByUser) return;
+    hideBanner();
+    setStatus("connecting", "connecting…");
+    var proto = location.protocol === "https:" ? "wss://" : "ws://";
+    var url = proto + location.host + "/dsh-remote-ssh/ws?id=" + encodeURIComponent(id) + "&token=" + encodeURIComponent(token);
+    try { ws = new WebSocket(url); } catch (e) { showBanner("WebSocket failed: " + e.message); setStatus("dead", "offline"); return; }
+
+    ws.onopen = function () {
+      setStatus("live", "connected");
+      fit(); sendResize();
+    };
+    ws.onmessage = function (ev) {
+      var frame;
+      try { frame = JSON.parse(ev.data); } catch (e) { return; }
+      if (!frame || typeof frame !== "object") return;
+      if (frame.type === "out" && typeof frame.data === "string") {
+        term.write(b64decode(frame.data));
+      } else if (frame.type === "exit") {
+        exited = true;
+        setStatus("dead", "session ended");
+        term.write("\r\n[remote ssh session ended" + (frame.exitCode !== null && frame.exitCode !== undefined ? " (exit " + frame.exitCode + ")" : "") + "]\r\n");
+        if (ws) { try { ws.close(1000); } catch (e) { /* ignore */ } }
+        ws = null;
+      } else if (frame.type === "error") {
+        showBanner("server: " + frame.message);
+      }
+    };
+    ws.onclose = function (ev) {
+      ws = null;
+      if (closedByUser || exited) return;
+      setStatus("dead", "disconnected");
+      showBanner("Connection lost. Click Reconnect to re-attach (the session is kept alive).");
+    };
+    ws.onerror = function () {
+      if (closedByUser || exited) return;
+      setStatus("dead", "error");
+    };
+  }
+
+  term.onData(function (data) {
+    if (ws && ws.readyState === 1 && !exited) {
+      ws.send(JSON.stringify({ type: "input", data: b64encode(data) }));
+    }
+  });
+  term.onResize(function () { sendResize(); });
+
+  reconnectBtn.addEventListener("click", function () { connect(); });
+  closeBtn.addEventListener("click", function () {
+    closedByUser = true;
+    if (ws && ws.readyState === 1) {
+      try { ws.send(JSON.stringify({ type: "close" })); } catch (e) { /* ignore */ }
+    }
+    term.write("\r\n[session closed]\r\n");
+    setStatus("dead", "closed");
+    try { window.close(); } catch (e) { /* ignore */ }
+  });
+
+  connect();
+})();
+</script>
+</body>
+</html>

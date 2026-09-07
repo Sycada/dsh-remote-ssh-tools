@@ -1,0 +1,8 @@
+node_modules/
+dev-assets/node_modules/
+*.log
+npm-debug.log*
+.DS_Store
+
+# smoke-test scratch dirs
+dev-assets/smoke-*/
