@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.1.2 — 2026-09-07
+
+### Changed
+
+- Package renamed from `dsh-remote-ssh` to `dsh-remote-ssh-tools` (the npm name
+  `dsh-remote-ssh` belongs to an unrelated project). Plugin id, cordis patch entry,
+  HTTP URL prefixes, settings-card ids, data directory and credential-ref prefix all
+  follow the new name:
+  - data dir: `~/.dsh/dsh-remote-ssh/` → `~/.dsh/dsh-remote-ssh-tools/`
+  - credential refs: `DSH_REMOTE_SSH_*` → `DSH_REMOTE_SSH_TOOLS_*` (applies to new
+    ad-hoc host defaults; existing saved profiles keep their stored refs)
+- Existing profiles can be migrated by copying `~/.dsh/dsh-remote-ssh/store.json`
+  to `~/.dsh/dsh-remote-ssh-tools/store.json` before the first start of 0.1.2.
+
 ## 0.1.1 — 2026-09-07
 
 ### Fixed

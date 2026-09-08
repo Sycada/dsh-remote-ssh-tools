@@ -1,8 +1,8 @@
-# dsh-remote-ssh
+# dsh-remote-ssh-tools
 
 为 **DeepSeek Harness**（含 DSH Desktop）而生的 SSH 会话管理插件：集中保存连接档案，让 Agent 能一键连服务器执行命令、开交互终端、传文件——所有秘密只存 DSH 凭据中心，界面与对话中永不出现明文。
 
-版本：**0.1.1** · License：MIT · 更新日志见 [CHANGELOG.md](CHANGELOG.md)
+版本：**0.1.2** · License：MIT · 更新日志见 [CHANGELOG.md](CHANGELOG.md)
 
 ## 功能一览
 
@@ -25,17 +25,17 @@
 
 ### 方式一：GitHub 依赖安装（推荐）
 
-本插件通过 GitHub 仓库（Sycada/dsh-remote-ssh）发布，**未发布到 npm**。
-⚠️ 注意：npm 上同名包 `dsh-remote-ssh`（0.1.0–0.2.4，Apache-2.0）属于另一个项目
-（Yan-Zero/dsh-remote-ssh），`dsh plugin add dsh-remote-ssh` 或商店搜索会装错包，请勿使用。
+本插件通过 GitHub 仓库（Sycada/dsh-remote-ssh）发布，包名 `dsh-remote-ssh-tools`，**未发布到 npm**。
+注意：npm 上另有名为 `dsh-remote-ssh` 的包（0.1.0–0.2.4，Apache-2.0），属于另一个项目
+（Yan-Zero/dsh-remote-ssh），与本插件无关，请勿混淆。
 
 在 DSH profile 的 `package.json` 中引用 GitHub 依赖并加入 bundle：
 
 ```jsonc
 "dependencies": {
-  "dsh-remote-ssh": "https://github.com/Sycada/dsh-remote-ssh.git#v0.1.1"
+  "dsh-remote-ssh-tools": "https://github.com/Sycada/dsh-remote-ssh.git#v0.1.2"
 },
-"dsh": { "profile": { "bundles": [ /* ...原有项... , "dsh-remote-ssh" ] } }
+"dsh": { "profile": { "bundles": [ /* ...原有项... , "dsh-remote-ssh-tools" ] } }
 ```
 
 在 profile 目录执行 `pnpm install` 后**重启 DSH**。
@@ -45,14 +45,14 @@
 将源码解压到本地目录，在 profile 的 `package.json` 中使用：
 
 ```jsonc
-"dsh-remote-ssh": "file:D:/path/to/dsh-remote-ssh"
+"dsh-remote-ssh-tools": "file:D:/path/to/dsh-remote-ssh-tools"
 ```
 
 `pnpm install` 后重启；迭代改代码后需重跑 `pnpm install` 同步到安装副本。
 
 1. 编辑 `~/.dsh/profiles/<profile名>/package.json`：
-   - `dependencies` 增加：`"dsh-remote-ssh": "<版本号>"`
-   - `dsh.profile.bundles` 增加：`"dsh-remote-ssh"`
+   - `dependencies` 增加：`"dsh-remote-ssh-tools": "<版本号>"`
+   - `dsh.profile.bundles` 增加：`"dsh-remote-ssh-tools"`
 2. 在 profile 目录执行 `pnpm install`
 3. **重启 / 重载该 profile**（新增 bundle 属组合变更，重启最稳）
 
@@ -89,7 +89,7 @@
 ## 凭据与安全设计
 
 - 档案 JSON 不含任何秘密；密码/口令经 DSH 凭据中心保存（`~/.dsh/.credentials.yaml`，属主权限）。
-- `密码引用`（passwordRef）是**引用名**而非密码本身；合法命名：字母/数字/下划线，以字母或下划线开头（如 `DSH_REMOTE_SSH_TEST_PASSWORD`）。非法命名在保存/写入前即被拒绝。
+- `密码引用`（passwordRef）是**引用名**而非密码本身；合法命名：字母/数字/下划线，以字母或下划线开头（如 `DSH_REMOTE_SSH_TOOLS_TEST_PASSWORD`）。非法命名在保存/写入前即被拒绝。
 - 删除档案时可选"同时清除其凭据"；同一引用被多个档案共用时自动跳过，避免误删。
 - ssh2 通道内认证（密码/私钥），密钥不进 argv/日志/工具输出；交互终端为纯 JS PTY 仿真（xterm），跨平台。
 - 主机密钥：默认 accept-new 并缓存；`hostKeyPolicy: strict` 时未知主机拒绝、指纹不符报错。
@@ -113,7 +113,7 @@
 
 ## 数据位置
 
-- `~/.dsh/dsh-remote-ssh/store.json`：连接档案 + 主机密钥指纹缓存（原子写入）。
+- `~/.dsh/dsh-remote-ssh-tools/store.json`：连接档案 + 主机密钥指纹缓存（原子写入）。
 - `~/.dsh/.credentials.yaml`：凭据中心（各档案的密码/口令值，引用式）。
 - 删除档案不会自动删除凭据，除非在删除确认中选择"删除并清除凭据"。
 

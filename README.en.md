@@ -1,10 +1,10 @@
-# dsh-remote-ssh
+# dsh-remote-ssh-tools
 
 SSH session manager for **DeepSeek Harness** (incl. DSH Desktop). Save connection
 profiles once; let the agent run commands, open interactive terminals, and move
 files — while secrets live only in the DSH credential center.
 
-Version: **0.1.1** · License: MIT · Changelog: [CHANGELOG.md](CHANGELOG.md)
+Version: **0.1.2** · License: MIT · Changelog: [CHANGELOG.md](CHANGELOG.md)
 
 ## Features
 
@@ -18,14 +18,14 @@ Version: **0.1.1** · License: MIT · Changelog: [CHANGELOG.md](CHANGELOG.md)
 
 ## Install
 
-This plugin is released via the GitHub repo (Sycada/dsh-remote-ssh) and is **not published to
-npm**. ⚠️ The npm package named `dsh-remote-ssh` (0.1.0–0.2.4, Apache-2.0) belongs to a different
-project (Yan-Zero/dsh-remote-ssh) — `dsh plugin add dsh-remote-ssh` or a store search installs
-the wrong package. Use a GitHub dependency instead:
+This plugin is released via the GitHub repo (Sycada/dsh-remote-ssh) as the package
+`dsh-remote-ssh-tools`; it is **not published to npm** (the npm name `dsh-remote-ssh-tools` is
+unclaimed). Note: a different project (Yan-Zero/dsh-remote-ssh) owns the npm package
+`dsh-remote-ssh` — unrelated to this plugin. Use a GitHub dependency instead:
 
 ```jsonc
-"dependencies": { "dsh-remote-ssh": "https://github.com/Sycada/dsh-remote-ssh.git#v0.1.1" },
-"dsh": { "profile": { "bundles": [ /* existing… */ "dsh-remote-ssh" ] } }
+"dependencies": { "dsh-remote-ssh-tools": "https://github.com/Sycada/dsh-remote-ssh.git#v0.1.2" },
+"dsh": { "profile": { "bundles": [ /* existing… */ "dsh-remote-ssh-tools" ] } }
 ```
 
 Run `pnpm install` in the profile dir, then **restart DSH**. For local iteration use a
@@ -55,10 +55,10 @@ Never paste secrets into chat — pass `passwordRef`/refs; values live in the cr
 - Deleting a profile may optionally also clear its credential lines; refs shared
   with other profiles are skipped automatically.
 - HTTP/WS routes sit behind the DSH browser-trust fence; sessions use unguessable tokens.
-- Data: `~/.dsh/dsh-remote-ssh/store.json` (profiles + host-key cache),
+- Data: `~/.dsh/dsh-remote-ssh-tools/store.json` (profiles + host-key cache),
   `~/.dsh/.credentials.yaml` (credential center).
 
-## Config (profile cordis.patch.yml → dsh-remote-ssh config)
+## Config (profile cordis.patch.yml → dsh-remote-ssh-tools config)
 
 `sshPath`, `connectTimeoutMs`, `keepaliveMs`, `runTimeoutMs`, `runOutputLimit`,
 `maxSessions`, `terminalScrollback`, `hostKeyPolicy` (accept-new|strict),
