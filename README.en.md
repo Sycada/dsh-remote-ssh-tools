@@ -18,13 +18,13 @@ Version: **0.1.2** · License: MIT · Changelog: [CHANGELOG.md](CHANGELOG.md)
 
 ## Install
 
-This plugin is released via the GitHub repo (Sycada/dsh-remote-ssh) as the package
+This plugin is released via the GitHub repo (Sycada/dsh-remote-ssh-tools) as the package
 `dsh-remote-ssh-tools`; it is **not published to npm** (the npm name `dsh-remote-ssh-tools` is
 unclaimed). Note: a different project (Yan-Zero/dsh-remote-ssh) owns the npm package
 `dsh-remote-ssh` — unrelated to this plugin. Use a GitHub dependency instead:
 
 ```jsonc
-"dependencies": { "dsh-remote-ssh-tools": "https://github.com/Sycada/dsh-remote-ssh.git#v0.1.2" },
+"dependencies": { "dsh-remote-ssh-tools": "https://github.com/Sycada/dsh-remote-ssh-tools.git#v0.1.2" },
 "dsh": { "profile": { "bundles": [ /* existing… */ "dsh-remote-ssh-tools" ] } }
 ```
 

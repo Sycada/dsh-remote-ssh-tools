@@ -25,7 +25,7 @@
 
 ### 方式一：GitHub 依赖安装（推荐）
 
-本插件通过 GitHub 仓库（Sycada/dsh-remote-ssh）发布，包名 `dsh-remote-ssh-tools`，**未发布到 npm**。
+本插件通过 GitHub 仓库（Sycada/dsh-remote-ssh-tools）发布，包名 `dsh-remote-ssh-tools`，**未发布到 npm**。
 注意：npm 上另有名为 `dsh-remote-ssh` 的包（0.1.0–0.2.4，Apache-2.0），属于另一个项目
 （Yan-Zero/dsh-remote-ssh），与本插件无关，请勿混淆。
 
@@ -33,7 +33,7 @@
 
 ```jsonc
 "dependencies": {
-  "dsh-remote-ssh-tools": "https://github.com/Sycada/dsh-remote-ssh.git#v0.1.2"
+  "dsh-remote-ssh-tools": "https://github.com/Sycada/dsh-remote-ssh-tools.git#v0.1.2"
 },
 "dsh": { "profile": { "bundles": [ /* ...原有项... , "dsh-remote-ssh-tools" ] } }
 ```
