@@ -58,5 +58,14 @@
     "engines": {
       "dsh": ">=0.1.1-rc.1"
     }
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sycada/dsh-remote-ssh-tools.git"
+  },
+  "homepage": "https://github.com/Sycada/dsh-remote-ssh-tools",
+  "bugs": {
+    "url": "https://github.com/Sycada/dsh-remote-ssh-tools/issues"
+  },
+  "author": "sycada"
 }
