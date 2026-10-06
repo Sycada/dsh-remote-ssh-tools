@@ -4,7 +4,7 @@ SSH session manager for **DeepSeek Harness** (incl. DSH Desktop). Save connectio
 profiles once; let the agent run commands, open interactive terminals, and move
 files — while secrets live only in the DSH credential center.
 
-Version: **0.1.3** · License: MIT · Changelog: [CHANGELOG.md](CHANGELOG.md)
+Version: **0.1.4** · License: MIT · Changelog: [CHANGELOG.md](CHANGELOG.md)
 
 ## Features
 

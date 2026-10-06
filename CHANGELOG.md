@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.1.4 — 2026-10-06
+
+### Fixed
+
+- **Duplicate "远程 SSH" entry in Settings.** 0.1.3 revived the `plugins.item`
+  registration while keeping the old `settings.section` page, so the plugin appeared
+  twice: once in the Settings left navigation and once in the Plugins page. Only
+  `plugins.item` is registered now — the section registration was there to compensate
+  for the dead slot and is redundant.
+- **The Plugins entry rendered its own header inside the page's header.** The Plugins
+  page supplies the icon, title, back button and collapse chrome, and calls the
+  registered component with `view="summary"` (list card: a one-line description) and
+  `view="page"` (detail page: the configuration body only). The component rendered a
+  full self-contained card with its own title in both, producing a second "远程 SSH"
+  header. It now honours the `view` contract; the standalone collapsible card remains
+  only for callers that pass no view.
+
+### Note
+
+- Being listed under **官方** in Settings → Plugins is expected, not a misconfiguration:
+  the page composes that group from the in-box packages *plus every `plugins.item`
+  registration*, so any plugin contributing to it appears there.
+
 ## 0.1.3 — 2026-10-06
 
 ### Fixed

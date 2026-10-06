@@ -2,7 +2,7 @@
 
 为 **DeepSeek Harness**（含 DSH Desktop）而生的 SSH 会话管理插件：集中保存连接档案，让 Agent 能一键连服务器执行命令、开交互终端、传文件——所有秘密只存 DSH 凭据中心，界面与对话中永不出现明文。
 
-版本：**0.1.3** · License：MIT · 更新日志见 [CHANGELOG.md](CHANGELOG.md)
+版本：**0.1.4** · License：MIT · 更新日志见 [CHANGELOG.md](CHANGELOG.md)
 
 ## 功能一览
 
