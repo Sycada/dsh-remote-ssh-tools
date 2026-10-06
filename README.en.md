@@ -4,7 +4,7 @@ SSH session manager for **DeepSeek Harness** (incl. DSH Desktop). Save connectio
 profiles once; let the agent run commands, open interactive terminals, and move
 files — while secrets live only in the DSH credential center.
 
-Version: **0.1.2** · License: MIT · Changelog: [CHANGELOG.md](CHANGELOG.md)
+Version: **0.1.3** · License: MIT · Changelog: [CHANGELOG.md](CHANGELOG.md)
 
 ## Features
 
@@ -24,7 +24,7 @@ unclaimed). Note: a different project (Yan-Zero/dsh-remote-ssh) owns the npm pac
 `dsh-remote-ssh` — unrelated to this plugin. Use a GitHub dependency instead:
 
 ```jsonc
-"dependencies": { "dsh-remote-ssh-tools": "https://github.com/Sycada/dsh-remote-ssh-tools.git#v0.1.2" },
+"dependencies": { "dsh-remote-ssh-tools": "https://github.com/Sycada/dsh-remote-ssh-tools.git#v0.1.3" },
 "dsh": { "profile": { "bundles": [ /* existing… */ "dsh-remote-ssh-tools" ] } }
 ```
 

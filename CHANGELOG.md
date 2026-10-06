@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.1.3 — 2026-10-06
+
+### Fixed
+
+- **Settings card was silently dead on DSH 0.2.x: the `settings.plugin.item` slot no
+  longer exists.** The Plugins page now declares a list slot named `plugins.item`
+  (kind `list`, scope `root`), and `slots.register` throws
+  `slot "..." is not declared` for any name a parent entry's children table does not
+  declare — so the old registration failed instead of degrading quietly. The collapsed
+  Remote SSH card in Settings → Plugins works again.
+- The dedicated Settings page (`settings.section`) also lost its label: it passed a
+  bare string while the slot resolves labels through the locale service. Both
+  registrations now declare `locale` and register a `dsh-remote-ssh-tools` dictionary
+  (zh: 远程 SSH / en: Remote SSH).
+- `dsh.client.inject` named `@deepseek-ai/dsh-client-runtime`, a package that does not
+  exist in DSH 0.2.x. It is now the real set the client half depends on
+  (`dsh-client-locale`, `dsh-client-ui-settings`, `dsh-client-ui-plugin-manager`).
+
+### Compatibility
+
+- Verified against DSH 0.2.0-rc.2 / dsh-tools 0.2.0-rc.2 / cordis 4.0.4. The agent
+  tools (`defineTool` + `output.render`), the credentials center
+  (`set`/`resolve`/`unset`), the HTTP/WS route API (`register`/`registerUpgrade`), the
+  system-prompt section and `ui.Input` are all unchanged in this version.
+
 ## 0.1.2 — 2026-09-07
 
 ### Changed

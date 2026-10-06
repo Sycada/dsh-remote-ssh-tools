@@ -1,6 +1,6 @@
 {
   "name": "dsh-remote-ssh-tools",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "SSH session manager for DeepSeek Harness: connection profiles, non-interactive ssh_run for the agent, and interactive terminals (node-pty + OpenSSH, xterm over WebSocket).",
   "type": "module",
   "main": "lib/index.js",
@@ -51,7 +51,9 @@
     },
     "client": {
       "inject": [
-        "@deepseek-ai/dsh-client-runtime"
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-settings",
+        "@deepseek-ai/dsh-client-ui-plugin-manager"
       ],
       "platform": "web"
     },
