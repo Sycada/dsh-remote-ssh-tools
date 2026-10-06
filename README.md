@@ -2,7 +2,7 @@
 
 为 **DeepSeek Harness**（含 DSH Desktop）而生的 SSH 会话管理插件：集中保存连接档案，让 Agent 能一键连服务器执行命令、开交互终端、传文件——所有秘密只存 DSH 凭据中心，界面与对话中永不出现明文。
 
-版本：**0.1.5** · License：MIT · 更新日志见 [CHANGELOG.md](CHANGELOG.md)
+版本：**0.1.6** · License：MIT · 更新日志见 [CHANGELOG.md](CHANGELOG.md)
 
 ## 功能一览
 
@@ -130,7 +130,9 @@
 
 ## 兼容性
 
-- 依赖 DSH（含 Desktop）≥ 0.1.1-rc.1；Node ≥ 20。
+- 依赖 DSH（含 Desktop）**0.2.0-rc.1 ~ 0.2.x**；Node ≥ 20。
+  为什么不是更早的版本：本插件注册的是 DSH 0.2 的 `plugins.item` 插槽（0.1.x 用的是已移除的
+  `settings.plugin.item`），`dsh.engines.dsh` 已按此声明，插件商店会据此判定兼容性。
 - 执行引擎为纯 JS ssh2 + xterm，Windows / macOS / Linux 均可运行交互终端。
 
 ## License

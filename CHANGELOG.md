@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.1.6 — 2026-10-06
+
+### Changed
+
+- **Declared the DSH version this plugin actually requires.** `dsh.engines.dsh` was
+  `>=0.1.1-rc.1`, a floor inherited from before the 0.2 slot change — the Market read it
+  as "compatible" even on a 0.1.x host, where `plugins.item` does not exist and the
+  Settings entry cannot mount. It is now `>=0.2.0-rc.1 <0.3.0-0`.
+- `peerDependencies` now names the host packages the client half is built against:
+  `@deepseek-ai/dsh-tools` moved to the same 0.2 range, and
+  `dsh-client-locale` / `dsh-client-ui-plugin-manager` / `dsh-client-ui-primitives` /
+  `dsh-client-ui-slots` were added. These are the declarations the Market intersects
+  when it decides whether a plugin can be installed on the running DSH.
+
+### Note
+
+- The Market reads the requirement from either `engines.dsh` or `dsh.engines.dsh`
+  (top-level wins) and conjoins it with every host peer; a version is "unknown" rather
+  than "compatible" when nothing is declared, so declaring is strictly better than
+  staying silent.
+
 ## 0.1.5 — 2026-10-06
 
 ### Fixed

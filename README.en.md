@@ -4,7 +4,7 @@ SSH session manager for **DeepSeek Harness** (incl. DSH Desktop). Save connectio
 profiles once; let the agent run commands, open interactive terminals, and move
 files — while secrets live only in the DSH credential center.
 
-Version: **0.1.5** · License: MIT · Changelog: [CHANGELOG.md](CHANGELOG.md)
+Version: **0.1.6** · License: MIT · Changelog: [CHANGELOG.md](CHANGELOG.md)
 
 ## Features
 
@@ -66,7 +66,8 @@ Never paste secrets into chat — pass `passwordRef`/refs; values live in the cr
 
 ## Compatibility
 
-Pure JS ssh2 + xterm terminal: Windows / macOS / Linux. Requires DSH ≥ 0.1.1-rc.1, Node ≥ 20.
+Pure JS ssh2 + xterm terminal: Windows / macOS / Linux. Requires DSH **0.2.0-rc.1 ~ 0.2.x**, Node ≥ 20
+(this plugin registers the DSH 0.2 `plugins.item` slot; 0.1.x used the removed `settings.plugin.item`).
 
 ## License
 
