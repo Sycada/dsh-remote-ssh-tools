@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.5 — 2026-10-06
+
+### Fixed
+
+- **The Plugins detail page rendered an empty body.** The component builds its content
+  only while its collapsible card is open (`let body = null; if (open) {…}`) and lazily
+  loads `/state` behind the same gate. The Plugins page renders it with `view="page"`
+  and no `defaultOpen`, so `open` was false there: the loader never ran and the body
+  stayed null — a title, a description and nothing else. Both gates now use an
+  `expanded` flag that is true for that view, so the detail page loads its state and
+  renders the profile list as intended (view="summary" and the standalone collapsible
+  card are unchanged).
+
 ## 0.1.4 — 2026-10-06
 
 ### Fixed
