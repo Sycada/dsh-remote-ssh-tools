@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.1.7 — 2026-11-01
+
+### Fixed
+
+- **The browser terminal page could not load — it died on a blank screen.** Every asset
+  URL in `lib/assets/terminal.html` still carried the pre-0.1.2 route prefix
+  `/dsh-remote-ssh/`, which stopped existing when 0.1.2 renamed the route to
+  `/dsh-remote-ssh-tools`. The host answered `xterm.css`, `addon-fit.js` and
+  `xterm.js` with an empty 404, so `window.Terminal` was undefined and the inline
+  script threw `ReferenceError` at `new Terminal` — the script aborted before it ever
+  attempted the WebSocket, which is why the page went blank instead of reporting an
+  error. The stylesheet, both scripts and the WebSocket URL now use the current prefix.
+- **`ssh_sftp_list` reported every entry as a directory.** The type came from
+  `e.attrs.isDirectory`, which is a *method*, not a boolean — a function reference is
+  always truthy, so directories and files both came back as `dir`. It now goes through
+  `statName()` like the rest of the SFTP code, and `statName()` itself falls back to
+  calling `isDirectory()` / `isFile()` when `mode` is absent, so both attribute shapes
+  classify correctly.
+
 ## 0.1.6 — 2026-10-06
 
 ### Changed
